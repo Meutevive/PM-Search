@@ -12,4 +12,5 @@
     <string name="statistiques">Statistiques</string>
     <string name="adresse_du_pm">Adresse du PM</string>
     <string name="ville">ville</string>
+    <string name="image_du_pm">image du pm</string>
 </resources>

@@ -42,8 +42,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/CustomTextInputLayout">
+                    android:gravity="center">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pmNumberEditText"
@@ -76,8 +75,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/CustomTextInputLayout">
+                    android:gravity="center">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/locationEditText"
@@ -108,8 +106,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        style="@style/CustomTextInputLayout">
+                        android:gravity="center">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/cityEditText"
@@ -141,8 +138,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/CustomTextInputLayout">
+                    android:gravity="center">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/commentEditText"
@@ -172,30 +168,20 @@
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                style="@style/CustomTextInputLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/photoEditText"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
-                android:background="@android:color/transparent"
-                android:drawableStart="@drawable/camera"
-                android:drawablePadding="12dp"
-                android:hint="@string/photo_PM"
-                android:inputType="text"
-                android:imeOptions="actionDone"
-                android:minWidth="320dp"
-                android:minHeight="45dp"
-                android:singleLine="true"
-                android:focusable="true"
-                android:clickable="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/photoButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:drawableStart="@drawable/camera"
+                    android:drawablePadding="12dp"
+                    android:text="@string/photo_PM"
+                    android:imeOptions="actionDone"
+                    android:minWidth="320dp"
+                    android:minHeight="45dp"
+                    android:focusable="true"
+                    android:clickable="true" />
 
             </androidx.cardview.widget.CardView>
 
@@ -203,10 +189,12 @@
             <ImageView
                 android:id="@+id/selectedImageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginTop="16dp"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/image_du_pm" />
+
 
 
             <!-- Submit Button -->

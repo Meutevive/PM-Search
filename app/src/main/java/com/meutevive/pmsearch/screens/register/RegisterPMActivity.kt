@@ -2,21 +2,17 @@ package com.meutevive.pmsearch.screens.register
 
 
 import BaseActivity
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.meutevive.pmsearch.R
-import com.meutevive.pmsearch.data.repository.FirebasePMRepository
+import com.meutevive.pmsearch.data.repository.FirestorePMRepository
 import com.meutevive.pmsearch.data.repository.PMRepository
 import com.meutevive.pmsearch.models.PM
 
@@ -32,6 +28,24 @@ class RegisterPMActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_pm)
+
+        //register btn
+        val registerButton: Button = findViewById(R.id.submit_button)
+        registerButton.setOnClickListener {
+            if (this::selectedImageUri.isInitialized) {
+                registerPM()
+            } else {
+                Toast.makeText(this, "Veuillez sélectionner une image avant d'enregistrer.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        //upload btn
+
+        val uploadButton: Button = findViewById(R.id.photoButton)
+        uploadButton.setOnClickListener {
+            openGallery()
+        }
+
 
 
     }
@@ -54,7 +68,7 @@ class RegisterPMActivity : BaseActivity() {
                 photoUrl = photoUrl
             )
 
-            val pmRepository: PMRepository = FirebasePMRepository()
+            val pmRepository: PMRepository = FirestorePMRepository()
             pmRepository.registerPM(newPM) { success ->
                 if (success) {
                     Toast.makeText(this, "PM enregistré avec succès.", Toast.LENGTH_SHORT).show()
@@ -87,16 +101,13 @@ class RegisterPMActivity : BaseActivity() {
 
 
     private fun openGallery() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-        } else {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, GALLERY_REQUEST_CODE)
-        }
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "image/*"
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-    //Le code pour gérer le refus de permission :
+   /* //Le code pour gérer le refus de permission :
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -106,7 +117,7 @@ class RegisterPMActivity : BaseActivity() {
             Toast.makeText(this, "Permission refusée. Vous ne pourrez pas sélectionner une image.", Toast.LENGTH_SHORT).show()
         }
     }
-
+*/
     //Le code pour mettre à jour l'interface utilisateur pour afficher l'image sélectionnée :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
