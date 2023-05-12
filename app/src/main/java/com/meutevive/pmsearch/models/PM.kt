@@ -1,7 +1,9 @@
 package com.meutevive.pmsearch.models
 
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 
-//shcema de PM
+@Parcelize
 data class PM(
     var id: String = "",
     var pmNumber: String = "",
@@ -10,4 +12,4 @@ data class PM(
     var comment: String = "",
     var date: Long = 0L,
     var photoUrl: String = ""
-)
+) : Parcelable

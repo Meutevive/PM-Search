@@ -20,7 +20,7 @@
         android:id="@+id/addPmButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Ajouter un PM"
+        android:text="@string/ajouter_un_pm"
         style="@style/rounded_button"
         app:cornerRadius="24dp"
         app:layout_constraintBottom_toBottomOf="parent"

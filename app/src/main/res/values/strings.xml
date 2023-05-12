@@ -13,4 +13,5 @@
     <string name="adresse_du_pm">Adresse du PM</string>
     <string name="ville">ville</string>
     <string name="image_du_pm">image du pm</string>
+    <string name="ajouter_un_pm">Ajouter un PM</string>
 </resources>
