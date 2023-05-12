@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "292387162151",
+    "firebase_url": "https://pm-search-f91f2-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "pm-search-f91f2",
+    "storage_bucket": "pm-search-f91f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292387162151:android:f996c3a3cffde0a18fa602",
+        "android_client_info": {
+          "package_name": "com.meutevive.pmsearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292387162151-33pnn0lqr5i2j3c1414ol9l6nqulbmvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3Bb68gpuQnGx2PSHltFjDnmo5F8FfIfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292387162151-33pnn0lqr5i2j3c1414ol9l6nqulbmvr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
