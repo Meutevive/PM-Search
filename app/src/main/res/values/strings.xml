@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">PM Search</string>
+    <string name="enregistrer">Enregistrer</string>
+    <string name="ajouter_une_photo">Ajouter une photo</string>
+    <string name="commentaire">Commentaire</string>
+    <string name="num_ro_pm">Numéro ou Nom du PM</string>
+    <string name="city">City</string>
+    <string name="rechercher_le_pm_ici">Rechercher le PM ici</string>
+    <string name="photo_PM">Photo du PM</string>
+    <string name="pm_r_cemment_ajout_s">PM récemment ajoutés</string>
+    <string name="pm_les_plus_consult_s">PM les plus consultés</string>
+    <string name="statistiques">Statistiques</string>
+    <string name="adresse_du_pm">Adresse du PM</string>
+    <string name="ville">ville</string>
 </resources>
