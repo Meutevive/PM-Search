@@ -17,4 +17,5 @@
     <string name="add_pm_button_description">Ajouter un nouveau PM</string>
     <string name="supprimer">Supprimer</string>
     <string name="modifier">Modifier</string>
+    <string name="confirmer">Confirmer</string>
 </resources>
