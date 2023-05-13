@@ -19,15 +19,19 @@ class FirestorePMRepository : PMRepository {
             }
     }
 
-    //get all PM from firestore
-    override fun getAllPMs(callback: (pmList: List<PM>?) -> Unit) {
-        pmCollection.get().addOnSuccessListener { documents ->
-            val pmList = documents.mapNotNull { document ->
-                document.toObject(PM::class.java)
+
+    //delete pm
+    fun deletePM(pmId: String, callback: (success: Boolean) -> Unit) {
+        pmCollection.document(pmId)
+            .delete()
+            .addOnSuccessListener {
+                callback(true)
             }
-            callback(pmList)
-        }.addOnFailureListener {
-            callback(null)
-        }
+            .addOnFailureListener {
+                callback(false)
+            }
     }
+
+
+
 }

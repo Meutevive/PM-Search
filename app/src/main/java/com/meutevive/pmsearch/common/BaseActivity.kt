@@ -6,7 +6,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.screens.home.HomeActivity
-import com.meutevive.pmsearch.screens.manage.ManagePMActivity
 import com.meutevive.pmsearch.screens.register.RegisterPMActivity
 import com.meutevive.pmsearch.screens.search.SearchPMActivity
 

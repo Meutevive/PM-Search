@@ -3,15 +3,18 @@
     <string name="enregistrer">Enregistrer</string>
     <string name="ajouter_une_photo">Ajouter une photo</string>
     <string name="commentaire">Commentaire</string>
-    <string name="num_ro_pm">Numéro ou Nom du PM</string>
+    <string name="num_ro_pm">Numéro de PM</string>
     <string name="city">City</string>
     <string name="rechercher_le_pm_ici">Rechercher le PM ici</string>
     <string name="photo_PM">Photo du PM</string>
     <string name="pm_r_cemment_ajout_s">PM récemment ajoutés</string>
     <string name="pm_les_plus_consult_s">PM les plus consultés</string>
     <string name="statistiques">Statistiques</string>
-    <string name="adresse_du_pm">Adresse du PM</string>
+    <string name="adresse_du_pm">Adresse de PM</string>
     <string name="ville">ville</string>
     <string name="image_du_pm">image du pm</string>
     <string name="ajouter_un_pm">Ajouter un PM</string>
+    <string name="add_pm_button_description">Ajouter un nouveau PM</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="modifier">Modifier</string>
 </resources>
