@@ -55,43 +55,24 @@ class FirestorePMRepository : PMRepository {
     }
 
     //search pm
-
     fun searchPM(query: String, callback: (List<PM>, Any?) -> Unit) {
         val db = FirebaseFirestore.getInstance()
 
         // First, we search by pmNumber
-        fun searchPM(query: String, callback: (List<PM>?, Exception?) -> Unit) {
-            db.collection("pms")
-                .whereEqualTo("pmNumber", query)
-                .get()
-                .addOnSuccessListener { documents ->
-                    val pms = documents.mapNotNull { it.toObject(PM::class.java) }
-                    if (pms.isNotEmpty()) {
-                        // If we found PMs by pmNumber, we return these results
-                        callback(pms, null)
-                    } else {
-                        // If no PM was found by pmNumber, we search by city
-                        db.collection("LesPM")
-                            .whereEqualTo("city", query)
-                            .get()
-                            .addOnSuccessListener { cityDocuments ->
-                                val cityPms =
-                                    cityDocuments.mapNotNull { it.toObject(PM::class.java) }
-                                // Return the results of the city search
-                                callback(cityPms, null)
-                            }
-                            .addOnFailureListener { exception ->
-                                Log.w(TAG, "Error getting documents: ", exception)
-                                callback(null, exception)
-                            }
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents: ", exception)
-                    callback(null, exception)
-                }
-        }
-
-
+        db.collection("LesPM")
+            .orderBy("pmNumber")
+            .startAt(query)
+            .endAt(query+"\uf8ff")
+            .get()
+            .addOnSuccessListener { documents ->
+                val pms = documents.mapNotNull { it.toObject(PM::class.java) }
+                callback(pms, null)
+            }
+            .addOnFailureListener { exception ->
+                callback(listOf(), exception)
+            }
     }
+
+
+
 }
