@@ -103,7 +103,6 @@ class SearchPMActivity : AppCompatActivity() {
             }
         }
     }
-g
 
 
 }
