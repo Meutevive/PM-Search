@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import android.net.Uri
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
@@ -13,7 +14,7 @@ import com.meutevive.pmsearch.models.PM
 import com.meutevive.pmsearch.screens.edit.EditPMActivity
 import com.meutevive.pmsearch.screens.register.RegisterPMActivity
 
-class PM_DetailsActivity : AppCompatActivity() {
+class PMDetailsActivity : AppCompatActivity() {
 
     private lateinit var pm: PM
 
@@ -29,6 +30,7 @@ class PM_DetailsActivity : AppCompatActivity() {
         val editButton: Button = findViewById(R.id.edit_button)
         val deleteButton: Button = findViewById(R.id.delete_button)
         val addButton: FloatingActionButton = findViewById(R.id.add_pm)
+        val routeButton: FloatingActionButton = findViewById(R.id.route_button)
 
         // set the text views with the PM information
         pmNameTextView.text = pm.pmNumber
@@ -57,12 +59,25 @@ class PM_DetailsActivity : AppCompatActivity() {
         }
 
 
-
         // handle click on the add button
         addButton.setOnClickListener {
             // start the add PM activity
             val addintent = Intent(this, RegisterPMActivity::class.java)
             startActivity(addintent)
         }
+
+        // New - handle click on the route button
+        routeButton.setOnClickListener {
+            // start the navigation to the PM location
+            val gmmIntentUri = Uri.parse("geo:0,0?q=${pm.address}")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            if (mapIntent.resolveActivity(packageManager) != null) {
+                startActivity(mapIntent)
+            } else {
+                Toast.makeText(this, "No map application found", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }
