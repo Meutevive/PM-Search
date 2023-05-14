@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.meutevive.pmsearch.models.PM
 import com.meutevive.pmsearch.R
 
-class PMAdapters(private val pmList: List<PM>, private val onItemClickListener: (PM) -> Unit) : RecyclerView.Adapter<PMAdapters.ViewHolder>() {
+class PMAdapters(private var pmList: List<PM>, private val onItemClickListener: (PM) -> Unit) : RecyclerView.Adapter<PMAdapters.ViewHolder>() {
 
     // Cette classe interne représente un élément de la liste (un PM)
     inner class ViewHolder(itemView: View, private val onItemClickListener: (PM) -> Unit) :
@@ -42,4 +42,10 @@ class PMAdapters(private val pmList: List<PM>, private val onItemClickListener: 
 
     // Cette méthode retourne le nombre d'éléments dans la liste de PM
     override fun getItemCount() = pmList.size
+
+    fun updatePMList(newPMList: List<PM>) {
+        pmList = newPMList
+        notifyDataSetChanged()
+    }
+
 }
