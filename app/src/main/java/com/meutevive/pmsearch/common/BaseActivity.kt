@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
-import com.meutevive.pmsearch.screens.home.HomeActivity
 import com.meutevive.pmsearch.screens.register.RegisterPMActivity
 import com.meutevive.pmsearch.screens.search.SearchPMActivity
 
@@ -26,10 +25,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.nav_item_home -> {
+                /*R.id.nav_item_home -> {
                     startActivity(Intent(this, HomeActivity::class.java))
                     true
-                }
+                }*/
                 R.id.nav_item_search -> {
                     // This will be called when the search item is clicked
                     val intent = Intent(this, SearchPMActivity::class.java)

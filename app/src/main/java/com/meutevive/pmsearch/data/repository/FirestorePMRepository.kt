@@ -42,8 +42,6 @@ class FirestorePMRepository : PMRepository {
     }
 
 
-
-
     //delete pm
     fun deletePM(pmId: String, callback: (success: Boolean) -> Unit) {
         pmCollection.document(pmId)
@@ -62,35 +60,38 @@ class FirestorePMRepository : PMRepository {
         val db = FirebaseFirestore.getInstance()
 
         // First, we search by pmNumber
-        db.collection("pms")
-            .whereEqualTo("pmNumber", query)
-            .get()
-            .addOnSuccessListener { documents ->
-                val pms = documents.mapNotNull { it.toObject(PM::class.java) }
-                if (pms.isNotEmpty()) {
-                    // If we found PMs by pmNumber, we return these results
-                    callback(pms)
-                } else {
-                    // If no PM was found by pmNumber, we search by city
-                    db.collection("pms")
-                        .whereEqualTo("city", query)
-                        .get()
-                        .addOnSuccessListener { cityDocuments ->
-                            val cityPms = cityDocuments.mapNotNull { it.toObject(PM::class.java) }
-                            // Return the results of the city search
-                            callback(cityPms)
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.w(TAG, "Error getting documents: ", exception)
-                        }
+        fun searchPM(query: String, callback: (List<PM>?, Exception?) -> Unit) {
+            db.collection("pms")
+                .whereEqualTo("pmNumber", query)
+                .get()
+                .addOnSuccessListener { documents ->
+                    val pms = documents.mapNotNull { it.toObject(PM::class.java) }
+                    if (pms.isNotEmpty()) {
+                        // If we found PMs by pmNumber, we return these results
+                        callback(pms, null)
+                    } else {
+                        // If no PM was found by pmNumber, we search by city
+                        db.collection("LesPM")
+                            .whereEqualTo("city", query)
+                            .get()
+                            .addOnSuccessListener { cityDocuments ->
+                                val cityPms =
+                                    cityDocuments.mapNotNull { it.toObject(PM::class.java) }
+                                // Return the results of the city search
+                                callback(cityPms, null)
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.w(TAG, "Error getting documents: ", exception)
+                                callback(null, exception)
+                            }
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
-            }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents: ", exception)
+                    callback(null, exception)
+                }
+        }
+
+
     }
-
-
-
-
 }
