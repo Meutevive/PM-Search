@@ -92,17 +92,18 @@ class SearchPMActivity : AppCompatActivity() {
         firestorePMRepository.searchPM(query) { results, exception ->
             if (exception != null) {
                 // Handle the error
-                Toast.makeText(this, "An error occurred: $exception", Toast.LENGTH_SHORT).show()
+                if (results.isEmpty()) {
+                    Toast.makeText(this, "Aucun PM trouvé", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Une erreur s'est produite: $exception", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 // Update the RecyclerView with the search results
-                if (results.isNotEmpty()) {
-                    pmAdapter.updatePMList(results)
-                } else {
-                    Toast.makeText(this, "Aucun PM trouverg", Toast.LENGTH_SHORT).show()
-                }
+                pmAdapter.updatePMList(results)
             }
         }
     }
+g
 
 
 }

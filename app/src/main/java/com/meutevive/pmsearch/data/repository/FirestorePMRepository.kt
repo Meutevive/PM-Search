@@ -59,19 +59,26 @@ class FirestorePMRepository : PMRepository {
         val db = FirebaseFirestore.getInstance()
 
         // First, we search by pmNumber
-        db.collection("LesPM")
-            .orderBy("pmNumber")
-            .startAt(query)
-            .endAt(query+"\uf8ff")
-            .get()
-            .addOnSuccessListener { documents ->
-                val pms = documents.mapNotNull { it.toObject(PM::class.java) }
-                callback(pms, null)
-            }
-            .addOnFailureListener { exception ->
-                callback(listOf(), exception)
-            }
+        fun searchPM(query: String, callback: (List<PM>?, Exception?) -> Unit) {
+            db.collection("LesPM")
+                .orderBy("pmNumber")
+                .startAt(query)
+                .endAt(query+"\uf8ff")
+                .get()
+                .addOnSuccessListener { documents ->
+                    val pms = documents.mapNotNull { it.toObject(PM::class.java) }
+                    if (pms.isEmpty()) {
+                        callback(emptyList(), Exception("No PM found"))
+                    } else {
+                        callback(pms, null)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    callback(null, exception)
+                }
+        }
     }
+
 
 
 
