@@ -87,7 +87,7 @@ class SearchPMActivity : AppCompatActivity() {
 
     }
 
-
+    //update search by keyword
     private fun performSearch(query: String) {
         firestorePMRepository.searchPM(query) { results, exception ->
             if (exception != null) {
@@ -98,7 +98,7 @@ class SearchPMActivity : AppCompatActivity() {
                 if (results.isNotEmpty()) {
                     pmAdapter.updatePMList(results)
                 } else {
-                    Toast.makeText(this, "No PMs found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Aucun PM trouverg", Toast.LENGTH_SHORT).show()
                 }
             }
         }
