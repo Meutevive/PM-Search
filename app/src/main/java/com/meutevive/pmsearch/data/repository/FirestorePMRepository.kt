@@ -11,34 +11,43 @@ class FirestorePMRepository : PMRepository {
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val pmCollection = firestore.collection("LesPM")
 
-    override fun registerPM(pm: PM, callback: (success: Boolean) -> Unit) {
-        pmCollection.add(pm)
-            .addOnSuccessListener {
-                callback(true)
-            }
-            .addOnFailureListener {
-                callback(false)
-            }
+
+
+
+    override fun registerPM(pm: PM, callback: (success: Boolean, id: String?) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val documentRef = db.collection("LesPM").document() // Create new document with auto generated id
+        pm.id = documentRef.id // Update the id of PM with the Firestore document id
+        documentRef
+            .set(pm)
+            .addOnSuccessListener { callback(true, pm.id) }
+            .addOnFailureListener { callback(false, null) }
     }
 
-    //save pm
-    override fun savePM(pm: PM, callback: (success: Boolean) -> Unit) {
+
+
+
+
+    //update pm
+    override fun updatePM(pm: PM, callback: (success: Boolean) -> Unit) {
         // Get a reference to your Firestore database
         val db = FirebaseFirestore.getInstance()
 
         // Get a reference to the specific PM document in the database
-        val pmRef = db.collection("LesPM").document(pm.id)
+        val pmRef = pm.id?.let { db.collection("LesPM").document(it) }
 
         // Set the PM document to the updated PM
-        pmRef.set(pm)
-            .addOnSuccessListener {
-                Log.d("EditPMActivity", "PM successfully updated!")
-                callback(true)
-            }
-            .addOnFailureListener { e ->
-                Log.w("EditPMActivity", "Error updating PM", e)
-                callback(false)
-            }
+        if (pmRef != null) {
+            pmRef.set(pm)
+                .addOnSuccessListener {
+                    Log.d("EditPMActivity", "PM successfully updated!")
+                    callback(true)
+                }
+                .addOnFailureListener { e ->
+                    Log.w("EditPMActivity", "Error updating PM", e)
+                    callback(false)
+                }
+        }
     }
 
 
@@ -55,29 +64,32 @@ class FirestorePMRepository : PMRepository {
     }
 
     //search pm
-    fun searchPM(query: String, callback: (List<PM>, Any?) -> Unit) {
-        val db = FirebaseFirestore.getInstance()
 
-        // First, we search by pmNumber
-        fun searchPM(query: String, callback: (List<PM>?, Exception?) -> Unit) {
-            db.collection("LesPM")
-                .orderBy("pmNumber")
-                .startAt(query)
-                .endAt(query+"\uf8ff")
-                .get()
-                .addOnSuccessListener { documents ->
-                    val pms = documents.mapNotNull { it.toObject(PM::class.java) }
-                    if (pms.isEmpty()) {
-                        callback(emptyList(), Exception("No PM found"))
-                    } else {
-                        callback(pms, null)
-                    }
+    fun searchPM(query: String, callback: (List<PM>?, Exception?) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("LesPM")
+            .orderBy("pmNumber")
+            .startAt(query)
+            .endAt(query+"\uf8ff")
+            .get()
+            .addOnSuccessListener { documents ->
+                val pms = documents.toObjects(PM::class.java)
+                if (pms.isEmpty()) {
+                    callback(emptyList(), null)
+                } else {
+                    callback(pms, null)
                 }
-                .addOnFailureListener { exception ->
-                    callback(null, exception)
-                }
-        }
+            }
+            .addOnFailureListener { exception ->
+                callback(null, exception)
+            }
     }
+
+
+
+
+
+
 
 
 

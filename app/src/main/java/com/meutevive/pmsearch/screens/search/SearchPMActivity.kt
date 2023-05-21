@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.adapters.PMAdapters
+import com.meutevive.pmsearch.data.repository.AlgoliaClient
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
+import com.meutevive.pmsearch.models.PM
 import com.meutevive.pmsearch.screens.manage.PMDetailsActivity
 import com.meutevive.pmsearch.screens.register.RegisterPMActivity
 
@@ -18,6 +20,8 @@ class SearchPMActivity : AppCompatActivity() {
 
     private lateinit var pmAdapter: PMAdapters
     private lateinit var firestorePMRepository: FirestorePMRepository
+    private val algoliaClient = AlgoliaClient()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,20 +93,25 @@ class SearchPMActivity : AppCompatActivity() {
 
     //update search by keyword
     private fun performSearch(query: String) {
-        firestorePMRepository.searchPM(query) { results, exception ->
+        firestorePMRepository.searchPM(query) { results: List<PM>?, exception: Exception? ->
             if (exception != null) {
                 // Handle the error
-                if (results.isEmpty()) {
-                    Toast.makeText(this, "Aucun PM trouvé", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Une erreur s'est produite: $exception", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(this, "Une erreur s'est produite: $exception", Toast.LENGTH_SHORT).show()
             } else {
                 // Update the RecyclerView with the search results
-                pmAdapter.updatePMList(results)
+                if (results != null) {
+                    if (results.isEmpty()) {
+                        Toast.makeText(this, "Aucun PM trouvé", Toast.LENGTH_SHORT).show()
+                    } else {
+                        pmAdapter.updatePMList(results)
+                    }
+                }
             }
         }
     }
+
+
+
 
 
 }
