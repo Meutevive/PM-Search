@@ -69,17 +69,19 @@ class RegisterPMActivity : BaseActivity() {
             )
 
             val pmRepository: PMRepository = FirestorePMRepository()
-            pmRepository.registerPM(newPM) { success ->
+            pmRepository.registerPM(newPM) { success, id ->
                 if (success) {
+                    newPM.id = id // Update the id of the PM with the Firestore document id
                     Toast.makeText(this, "PM enregistré avec succès.", Toast.LENGTH_SHORT).show()
                     finish() // Ferme l'activité et retourne à l'écran précédent.
                 } else {
                     Toast.makeText(this, "Erreur lors de l'enregistrement du PM. Veuillez réessayer.", Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
+
+
 
     //La fonction uploadPhoto pour télécharger une image sur Firebase Storage
     private fun uploadPhoto(uri: Uri, callback: (String) -> Unit) {

@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.net.Uri
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
@@ -25,8 +27,11 @@ class PMDetailsActivity : AppCompatActivity() {
         // retrieve the PM object from intent
         pm = intent.getParcelableExtra<PM>("pm")!!
 
-        val pmNameTextView: TextView = findViewById(R.id.pm_name)
-        val pmDetailTextView: TextView = findViewById(R.id.pm_detail)
+        val pmNameTextView: TextView = findViewById(R.id.pm_number)
+        val pmDetailTextView: TextView = findViewById(R.id.pm_comment)
+        val pmAdresse: TextView = findViewById(R.id.pm_address)
+        val pmCity: TextView = findViewById(R.id.pm_city)
+        val pmImageView: ImageView = findViewById(R.id.pm_photo)
         val editButton: Button = findViewById(R.id.edit_button)
         val deleteButton: Button = findViewById(R.id.delete_button)
         val addButton: FloatingActionButton = findViewById(R.id.add_pm)
@@ -35,6 +40,16 @@ class PMDetailsActivity : AppCompatActivity() {
         // set the text views with the PM information
         pmNameTextView.text = pm.pmNumber
         pmDetailTextView.text = pm.comment
+        pmAdresse.text = pm.address
+        pmCity.text = pm.city
+
+        //setup imageview
+
+        Glide.with(this)
+            .load(pm.photoUrl)
+            .placeholder(R.drawable.loading_spinner)
+            .error(R.drawable.error_image)
+            .into(pmImageView)
 
         // handle click on the edit button
         editButton.setOnClickListener {
@@ -46,14 +61,16 @@ class PMDetailsActivity : AppCompatActivity() {
 
         // handle click on the delete button
         deleteButton.setOnClickListener {
-            FirestorePMRepository().deletePM(pm.id) { success ->
-                if (success) {
-                    // PM was deleted successfully
-                    Toast.makeText(this, "PM deleted", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    // PM could not be deleted
-                    Toast.makeText(this, "Could not delete PM", Toast.LENGTH_SHORT).show()
+            pm.id?.let { it1 ->
+                FirestorePMRepository().deletePM(it1) { success ->
+                    if (success) {
+                        // PM was deleted successfully
+                        Toast.makeText(this, "PM deleted", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        // PM could not be deleted
+                        Toast.makeText(this, "Could not delete PM", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

@@ -5,7 +5,7 @@ import android.os.Parcelable
 
 @Parcelize
 data class PM(
-    var id: String = "",
+    var id: String? = null,
     var pmNumber: String = "",
     var city: String = "",
     var address: String = "",
