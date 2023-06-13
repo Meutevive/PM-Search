@@ -53,7 +53,6 @@ class PMDetailsActivity : AppCompatActivity() {
         pmNameTextView.text = pm.pmNumber
         pmDetailTextView.text = pm.comment
         pmAdresse.text = pm.address
-        pmCity.text = pm.city
 
         // load image with Glide
         pm = intent.getParcelableExtra<PM>("pm")!!

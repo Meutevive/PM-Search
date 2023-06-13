@@ -7,7 +7,6 @@ import android.os.Parcelable
 data class PM(
     var id: String? = null,
     var pmNumber: String = "",
-    var city: String = "",
     var address: String = "",
     var comment: String = "",
     var date: Long = 0L,

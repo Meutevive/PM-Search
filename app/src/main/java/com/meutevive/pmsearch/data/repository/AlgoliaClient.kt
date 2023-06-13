@@ -24,7 +24,6 @@ class AlgoliaClient {
                         val pm = PM(
                             id = item.getString("id"),
                             pmNumber = item.getString("pmNumber"),
-                            city = item.getString("city"),
                             address = item.getString("address"),
                             comment = item.getString("comment"),
                             date = item.getLong("date"),

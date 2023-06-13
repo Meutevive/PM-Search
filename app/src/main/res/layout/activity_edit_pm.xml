@@ -94,38 +94,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- City CardView -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/colorTextInputBackground"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/cityEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:background="@android:color/transparent"
-                        android:drawableStart="@drawable/ville"
-                        android:drawablePadding="12dp"
-                        android:hint="@string/ville"
-                        android:imeOptions="actionNext"
-                        android:minWidth="320dp"
-                        android:minHeight="45dp"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </androidx.cardview.widget.CardView>
-
             <!-- Comment CardView -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
