@@ -9,6 +9,8 @@ import android.widget.Toast
 import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
@@ -19,23 +21,33 @@ import com.meutevive.pmsearch.screens.register.RegisterPMActivity
 class PMDetailsActivity : AppCompatActivity() {
 
     private lateinit var pm: PM
+    private val repository = FirestorePMRepository()
+    private lateinit var pmNameTextView: TextView
+    private lateinit var  pmDetailTextView:TextView
+    private lateinit var pmAdresse: TextView
+    private lateinit var pmCity:TextView
+    private lateinit var  pmImageView: ImageView
+    private lateinit var editButton: Button
+    private lateinit var deleteButton: Button
+    private lateinit var addButton: FloatingActionButton
+    private lateinit var routeButton: FloatingActionButton
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+            override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pm_details)
 
         // retrieve the PM object from intent
         pm = intent.getParcelableExtra<PM>("pm")!!
 
-        val pmNameTextView: TextView = findViewById(R.id.pm_number)
-        val pmDetailTextView: TextView = findViewById(R.id.pm_comment)
-        val pmAdresse: TextView = findViewById(R.id.pm_address)
-        val pmCity: TextView = findViewById(R.id.pm_city)
-        val pmImageView: ImageView = findViewById(R.id.pm_photo)
-        val editButton: Button = findViewById(R.id.edit_button)
-        val deleteButton: Button = findViewById(R.id.delete_button)
-        val addButton: FloatingActionButton = findViewById(R.id.add_pm)
-        val routeButton: FloatingActionButton = findViewById(R.id.route_button)
+        pmNameTextView = findViewById(R.id.pm_number)
+        pmDetailTextView = findViewById(R.id.pm_comment)
+        pmAdresse= findViewById(R.id.pm_address)
+        pmCity = findViewById(R.id.pm_city)
+        pmImageView = findViewById(R.id.pm_photo)
+        editButton = findViewById(R.id.edit_button)
+        deleteButton = findViewById(R.id.delete_button)
+        addButton = findViewById(R.id.add_pm)
+        routeButton  = findViewById(R.id.route_button)
 
         // set the text views with the PM information
         pmNameTextView.text = pm.pmNumber
@@ -43,13 +55,16 @@ class PMDetailsActivity : AppCompatActivity() {
         pmAdresse.text = pm.address
         pmCity.text = pm.city
 
-        //setup imageview
+        // load image with Glide
+        pm = intent.getParcelableExtra<PM>("pm")!!
 
-        Glide.with(this)
-            .load(pm.photoUrl)
-            .placeholder(R.drawable.loading_spinner)
-            .error(R.drawable.error_image)
-            .into(pmImageView)
+        repository.getPM(pm.id!!) { updatedPm ->
+            pm = updatedPm // update local PM object
+            // load image with Glide
+            Glide.with(this)
+                .load(pm.photoUrl)
+                .into(pmImageView)
+        }
 
         // handle click on the edit button
         editButton.setOnClickListener {
