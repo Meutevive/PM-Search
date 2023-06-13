@@ -47,10 +47,15 @@ class RegisterPMActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_pm)
+        supportActionBar?.hide()
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //register btn
+        initializeViews()
+    }
+
+    private fun initializeViews() {
+        // Register button
         val registerButton: Button = findViewById(R.id.submit_button)
         registerButton.setOnClickListener {
             if (this::selectedImageUri.isInitialized) {
@@ -59,7 +64,8 @@ class RegisterPMActivity : BaseActivity() {
                 Toast.makeText(this, "Veuillez sélectionner une image avant d'enregistrer.", Toast.LENGTH_SHORT).show()
             }
         }
-        //location textview.
+
+        // Location textview
         val locationEditText = findViewById<EditText>(R.id.locationEditText)
         locationEditText.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -67,15 +73,11 @@ class RegisterPMActivity : BaseActivity() {
             }
         }
 
-        //upload btn
-
+        // Upload button
         val uploadButton: Button = findViewById(R.id.photoButton)
         uploadButton.setOnClickListener {
             openGallery()
         }
-
-
-
     }
 
     private fun requestLocation() {

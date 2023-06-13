@@ -20,18 +20,23 @@ class SearchPMActivity : AppCompatActivity() {
 
     private lateinit var pmAdapter: PMAdapters
     private lateinit var firestorePMRepository: FirestorePMRepository
-    private val algoliaClient = AlgoliaClient()
+   /* private val algoliaClient = AlgoliaClient()*/
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_pm)
+        supportActionBar?.hide()
 
+        firestorePMRepository = FirestorePMRepository()
+
+        initializeViews()
+    }
+
+    private fun initializeViews() {
         val searchResultsRecyclerView: RecyclerView = findViewById(R.id.search_results_recycler_view)
         val pmSearchView: SearchView = findViewById(R.id.pmSearchView)
         val addPM: FloatingActionButton = findViewById(R.id.add_pm)
-
-        firestorePMRepository = FirestorePMRepository()
 
         pmAdapter = PMAdapters(listOf()) { pm ->
             // Handle click on a PM
@@ -66,29 +71,12 @@ class SearchPMActivity : AppCompatActivity() {
         })
 
         val searchPmButton: FloatingActionButton = findViewById(R.id.searchPmButton)
-
-        pmSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                // Do nothing on submit, we update as the user types
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrBlank()) {
-                    performSearch(newText)
-                }
-                return true
-            }
-        })
-
-
         searchPmButton.setOnClickListener {
             val query = pmSearchView.query.toString()
             if (!query.isBlank()) {
                 performSearch(query)
             }
         }
-
     }
 
     //update search by keyword
