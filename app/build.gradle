@@ -80,7 +80,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
-    implementation 'com.google.firebase:firebase-firestore:24.6.0'
+    implementation 'com.google.firebase:firebase-firestore:24.6.1'
 
 
     // Glide
@@ -94,6 +94,9 @@ dependencies {
 
     //algolia
     implementation 'com.algolia:algoliasearch-android:3.+'
+
+    //google play servicies
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
 
 

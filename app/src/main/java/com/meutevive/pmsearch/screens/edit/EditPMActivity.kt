@@ -13,6 +13,8 @@ import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.models.PM
 
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
@@ -59,9 +61,17 @@ class EditPMActivity : AppCompatActivity() {
         commentInput.setText(pm.comment)
 
         // load image with Glide
-        Glide.with(this)
-            .load(pm.photoUrl)
-            .into(imageView)
+        pm = intent.getParcelableExtra<PM>("pm")!!
+
+        repository.getPM(pm.id!!) { updatedPm ->
+            pm = updatedPm // update local PM object
+            // load image with Glide
+            Glide.with(this)
+                .load(pm.photoUrl)
+                .into(imageView)
+        }
+
+
 
         //call openGallery to execute.
         PhotoButton.setOnClickListener {
@@ -85,14 +95,17 @@ class EditPMActivity : AppCompatActivity() {
             uploadPhoto(selectedImageUri) { photoUrl ->
                 pm.photoUrl = photoUrl
 
+                // update ImageView with the new photo
+                Glide.with(this)
+                    .load(photoUrl)
+                    .into(imageView)
+
                 repository.updatePM(pm) { success ->
                     if (success) {
                         Toast.makeText(this, "PM mis à jour avec succès.", Toast.LENGTH_SHORT).show()
-                        Log.d("EditPMActivity", "PM successfully updated!")
                         finish()
                     } else {
                         Toast.makeText(this, "Erreur lors de la mise à jour du PM.", Toast.LENGTH_SHORT).show()
-                        Log.w("EditPMActivity", "Error updating PM")
                     }
                 }
             }
@@ -101,15 +114,13 @@ class EditPMActivity : AppCompatActivity() {
                 if (success) {
                     Toast.makeText(this, "PM mis à jour avec succès.", Toast.LENGTH_SHORT).show()
                     finish()
-                    Log.d("EditPMActivity", "PM successfully updated!")
-                    finish()
                 } else {
                     Toast.makeText(this, "Erreur lors de la mise à jour du PM.", Toast.LENGTH_SHORT).show()
-                    Log.w("EditPMActivity", "Error updating PM")
                 }
             }
         }
     }
+
 
 
 

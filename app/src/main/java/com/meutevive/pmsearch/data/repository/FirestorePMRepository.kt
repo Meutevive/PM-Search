@@ -85,6 +85,23 @@ class FirestorePMRepository : PMRepository {
             }
     }
 
+    //get all pms
+    fun getPM(pmId: String, callback: (PM) -> Unit) {
+        firestore.collection("LesPM").document(pmId).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val pm = document.toObject(PM::class.java)
+                    callback(pm!!)
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+    }
+
+
 
 
 
