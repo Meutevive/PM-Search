@@ -14,7 +14,7 @@ class PMAdapters(private var pmList: List<PM>, private val onItemClickListener: 
     inner class ViewHolder(itemView: View, private val onItemClickListener: (PM) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
         val pmNumberTextView: TextView = itemView.findViewById(R.id.pm_number)
-        val cityTextView: TextView = itemView.findViewById(R.id.pm_city)
+        val adresseTextView: TextView = itemView.findViewById(R.id.locationEditText)
 
         init {
             itemView.setOnClickListener {
@@ -36,7 +36,7 @@ class PMAdapters(private var pmList: List<PM>, private val onItemClickListener: 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pm = pmList[position]
         holder.pmNumberTextView.text = pm.pmNumber
-        holder.cityTextView.text = pm.city
+        holder.adresseTextView.text = pm.address
         // Définissez les valeurs pour les autres vues si nécessaire
     }
 

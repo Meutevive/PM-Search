@@ -63,7 +63,8 @@
         android:src="@drawable/plus"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/add_pm" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_recycler_view"

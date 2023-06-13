@@ -27,7 +27,6 @@ class EditPMActivity : AppCompatActivity() {
 
     // déclare les propriété
     private lateinit var pmNumberInput: EditText
-    private lateinit var cityInput: EditText
     private lateinit var addressInput: EditText
     private lateinit var commentInput: EditText
     private lateinit var confirmButton: Button
@@ -44,7 +43,6 @@ class EditPMActivity : AppCompatActivity() {
 
         // initialise
         pmNumberInput = findViewById(R.id.pmNumberEditText)
-        cityInput = findViewById(R.id.cityEditText)
         addressInput = findViewById(R.id.locationEditText)
         commentInput = findViewById(R.id.commentEditText)
         confirmButton = findViewById(R.id.submit_button)
@@ -56,7 +54,6 @@ class EditPMActivity : AppCompatActivity() {
 
         // load PM data into input fields
         pmNumberInput.setText(pm.pmNumber)
-        cityInput.setText(pm.city)
         addressInput.setText(pm.address)
         commentInput.setText(pm.comment)
 
@@ -87,7 +84,6 @@ class EditPMActivity : AppCompatActivity() {
     //updatePM (modified to add photo edits)
     private fun saveEdits() {
         pm.pmNumber = pmNumberInput.text.toString()
-        pm.city = cityInput.text.toString()
         pm.address = addressInput.text.toString()
         pm.comment = commentInput.text.toString()
 

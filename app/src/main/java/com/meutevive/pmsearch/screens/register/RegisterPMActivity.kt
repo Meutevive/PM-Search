@@ -9,12 +9,16 @@ import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -22,6 +26,10 @@ import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
 import com.meutevive.pmsearch.data.repository.PMRepository
 import com.meutevive.pmsearch.models.PM
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.Locale
 
@@ -54,7 +62,9 @@ class RegisterPMActivity : BaseActivity() {
         //location textview.
         val locationEditText = findViewById<EditText>(R.id.locationEditText)
         locationEditText.setOnClickListener {
-            requestLocation()
+            CoroutineScope(Dispatchers.IO).launch {
+                requestLocation()
+            }
         }
 
         //upload btn
@@ -78,20 +88,30 @@ class RegisterPMActivity : BaseActivity() {
             return
         }
 
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
-                // Obtenu le dernier emplacement connu. Dans de rares situations, cela peut être null.
-                if (location != null) {
-                    fillAddressFromLocation(location)
+        val locationRequest = LocationRequest.create().apply {
+            interval = 10000 // Précise l'intervalle de mise à jour en millisecondes
+            fastestInterval = 5000 // Précise l'intervalle de mise à jour le plus rapide en millisecondes
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                CoroutineScope(Dispatchers.IO).launch {
+                    locationResult.lastLocation?.let { fillAddressFromLocation(it) }
                 }
             }
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
     }
 
 
 
 
+
     //obtien l'adresse
-    private fun fillAddressFromLocation(location: Location) {
+    private suspend fun fillAddressFromLocation(location: Location) {
         val geocoder = Geocoder(this, Locale.getDefault())
 
         try {
@@ -99,15 +119,19 @@ class RegisterPMActivity : BaseActivity() {
             val address = addresses?.get(0)
 
             val addressText = address?.let {
-                String.format("%s, %s, %s",
-                    if (address.maxAddressLineIndex > 0) address.getAddressLine(0) else "",
-                    it.locality,
-                    address.countryName)
+
+                String.format("%s, %s, %s, %s, %s",
+                    it.subThoroughfare, //numéro de rue
+                    it.thoroughfare, // nom de rue
+                    it.postalCode, // code postal
+                    it.locality, //  ville
+                    it.countryName) // pays
             }
 
-            val locationEditText = findViewById<EditText>(R.id.locationEditText)
-            locationEditText.setText(addressText)
-
+            withContext(Dispatchers.Main) {
+                val locationEditText = findViewById<EditText>(R.id.locationEditText)
+                locationEditText.setText(addressText)
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -115,9 +139,9 @@ class RegisterPMActivity : BaseActivity() {
 
 
 
+
     private fun registerPM() {
         val pmNumber = findViewById<EditText>(R.id.pmNumberEditText).text.toString()
-        val city = findViewById<EditText>(R.id.cityEditText).text.toString()
         val address = findViewById<EditText>(R.id.locationEditText).text.toString()
         val comment = findViewById<EditText>(R.id.commentEditText).text.toString()
         val date = System.currentTimeMillis()
@@ -126,7 +150,6 @@ class RegisterPMActivity : BaseActivity() {
         uploadPhoto(selectedImageUri) { photoUrl ->
             val newPM = PM(
                 pmNumber = pmNumber,
-                city = city,
                 address = address,
                 comment = comment,
                 date = date,
