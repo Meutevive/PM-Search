@@ -23,47 +23,38 @@ class PMDetailsActivity : AppCompatActivity() {
     private lateinit var pm: PM
     private val repository = FirestorePMRepository()
     private lateinit var pmNameTextView: TextView
-    private lateinit var  pmDetailTextView:TextView
+    private lateinit var pmDetailTextView: TextView
     private lateinit var pmAdresse: TextView
-    private lateinit var pmCity:TextView
-    private lateinit var  pmImageView: ImageView
+    private lateinit var pmCity: TextView
+    private lateinit var pmImageView: ImageView
     private lateinit var editButton: Button
     private lateinit var deleteButton: Button
     private lateinit var addButton: FloatingActionButton
     private lateinit var routeButton: FloatingActionButton
 
-            override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pm_details)
+        supportActionBar?.hide()
 
         // retrieve the PM object from intent
-        pm = intent.getParcelableExtra<PM>("pm")!!
+        pm = intent.getParcelableExtra<PM>("pm") ?: PM()
 
+        initializeViews()
+
+        loadPMData(pm)
+    }
+
+    private fun initializeViews() {
         pmNameTextView = findViewById(R.id.pm_number)
         pmDetailTextView = findViewById(R.id.pm_comment)
-        pmAdresse= findViewById(R.id.pm_address)
+        pmAdresse = findViewById(R.id.pm_address)
         pmCity = findViewById(R.id.pm_city)
         pmImageView = findViewById(R.id.pm_photo)
         editButton = findViewById(R.id.edit_button)
         deleteButton = findViewById(R.id.delete_button)
         addButton = findViewById(R.id.add_pm)
-        routeButton  = findViewById(R.id.route_button)
-
-        // set the text views with the PM information
-        pmNameTextView.text = pm.pmNumber
-        pmDetailTextView.text = pm.comment
-        pmAdresse.text = pm.address
-
-        // load image with Glide
-        pm = intent.getParcelableExtra<PM>("pm")!!
-
-        repository.getPM(pm.id!!) { updatedPm ->
-            pm = updatedPm // update local PM object
-            // load image with Glide
-            Glide.with(this)
-                .load(pm.photoUrl)
-                .into(pmImageView)
-        }
+        routeButton = findViewById(R.id.route_button)
 
         // handle click on the edit button
         editButton.setOnClickListener {
@@ -71,7 +62,6 @@ class PMDetailsActivity : AppCompatActivity() {
             editIntent.putExtra("pm", pm)
             startActivity(editIntent)
         }
-
 
         // handle click on the delete button
         deleteButton.setOnClickListener {
@@ -89,12 +79,11 @@ class PMDetailsActivity : AppCompatActivity() {
             }
         }
 
-
         // handle click on the add button
         addButton.setOnClickListener {
             // start the add PM activity
-            val addintent = Intent(this, RegisterPMActivity::class.java)
-            startActivity(addintent)
+            val addIntent = Intent(this, RegisterPMActivity::class.java)
+            startActivity(addIntent)
         }
 
         // New - handle click on the route button
@@ -109,6 +98,19 @@ class PMDetailsActivity : AppCompatActivity() {
                 Toast.makeText(this, "No map application found", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
+    private fun loadPMData(pm: PM) {
+        pmNameTextView.text = pm.pmNumber
+        pmDetailTextView.text = pm.comment
+        pmAdresse.text = pm.address
+
+        repository.getPM(pm.id!!) { updatedPm ->
+            this.pm = updatedPm // update local PM object
+            // load image with Glide
+            Glide.with(this)
+                .load(pm.photoUrl)
+                .into(pmImageView)
+        }
     }
 }

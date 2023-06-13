@@ -32,7 +32,7 @@ class EditPMActivity : AppCompatActivity() {
     private lateinit var confirmButton: Button
     private lateinit var imageView: ImageView
     private lateinit var PhotoButton: Button
-    private lateinit var selectedImageUri: Uri
+    private  var selectedImageUri: Uri? = null
 
 
     private lateinit var pm: PM
@@ -40,46 +40,51 @@ class EditPMActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_pm)
+        supportActionBar?.hide()
 
-        // initialise
+        initializeViews()
+
+        pm = intent.getParcelableExtra<PM>("pm") ?: PM()
+        // load PM data into input fields
+        loadPMData(pm)
+    }
+
+    private fun initializeViews() {
         pmNumberInput = findViewById(R.id.pmNumberEditText)
         addressInput = findViewById(R.id.locationEditText)
         commentInput = findViewById(R.id.commentEditText)
         confirmButton = findViewById(R.id.submit_button)
         imageView = findViewById(R.id.selectedImageView)
         PhotoButton = findViewById(R.id.photoButton)
+        PhotoButton.setOnClickListener {
+            openGallery()
+        }
+        confirmButton.setOnClickListener {
+            saveEdits()
+        }
+    }
 
-
-        pm = intent.getParcelableExtra<PM>("pm")!!
-
-        // load PM data into input fields
+    private fun loadPMData(pm: PM) {
         pmNumberInput.setText(pm.pmNumber)
         addressInput.setText(pm.address)
         commentInput.setText(pm.comment)
 
-        // load image with Glide
-        pm = intent.getParcelableExtra<PM>("pm")!!
-
         repository.getPM(pm.id!!) { updatedPm ->
-            pm = updatedPm // update local PM object
+            this.pm = updatedPm // update local PM object
             // load image with Glide
             Glide.with(this)
                 .load(pm.photoUrl)
                 .into(imageView)
         }
-
-
-
-        //call openGallery to execute.
-        PhotoButton.setOnClickListener {
-            openGallery()
-        }
-
-
-        confirmButton.setOnClickListener {
-            saveEdits()
-        }
     }
+
+
+
+
+
+
+
+
 
     //updatePM (modified to add photo edits)
     private fun saveEdits() {
@@ -87,8 +92,8 @@ class EditPMActivity : AppCompatActivity() {
         pm.address = addressInput.text.toString()
         pm.comment = commentInput.text.toString()
 
-        if (this::selectedImageUri.isInitialized) {
-            uploadPhoto(selectedImageUri) { photoUrl ->
+        if (selectedImageUri != null) {
+            uploadPhoto(selectedImageUri!!) { photoUrl ->
                 pm.photoUrl = photoUrl
 
                 // update ImageView with the new photo
@@ -96,26 +101,24 @@ class EditPMActivity : AppCompatActivity() {
                     .load(photoUrl)
                     .into(imageView)
 
-                repository.updatePM(pm) { success ->
-                    if (success) {
-                        Toast.makeText(this, "PM mis à jour avec succès.", Toast.LENGTH_SHORT).show()
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Erreur lors de la mise à jour du PM.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                updatePM()
             }
         } else {
-            repository.updatePM(pm) { success ->
-                if (success) {
-                    Toast.makeText(this, "PM mis à jour avec succès.", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    Toast.makeText(this, "Erreur lors de la mise à jour du PM.", Toast.LENGTH_SHORT).show()
-                }
+            updatePM()
+        }
+    }
+
+    private fun updatePM() {
+        repository.updatePM(pm) { success ->
+            if (success) {
+                Toast.makeText(this, "PM mis à jour avec succès.", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, "Erreur lors de la mise à jour du PM.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
 
 
@@ -145,7 +148,7 @@ class EditPMActivity : AppCompatActivity() {
         val imagesRef = storageRef.child("images/${uri.lastPathSegment}")
 
         val uploadTask = imagesRef.putFile(uri)
-        uploadTask.addOnSuccessListener { taskSnapshot ->
+        uploadTask.addOnSuccessListener {
             // Récupérer l'URL de l'image téléchargée
             imagesRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                 callback(downloadUrl.toString())
