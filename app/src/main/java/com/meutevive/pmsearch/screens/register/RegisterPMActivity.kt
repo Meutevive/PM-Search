@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.meutevive.pmsearch.R
-import com.meutevive.pmsearch.data.repository.FirebasePMRepository
+import com.meutevive.pmsearch.data.repository.FirestorePMRepository
 import com.meutevive.pmsearch.data.repository.PMRepository
 import com.meutevive.pmsearch.models.PM
 import kotlinx.coroutines.CoroutineScope
@@ -158,7 +158,7 @@ class RegisterPMActivity : BaseActivity() {
                 photoUrl = photoUrl
             )
 
-            val pmRepository: PMRepository = FirebasePMRepository()
+            val pmRepository: PMRepository = FirestorePMRepository()
             pmRepository.registerPM(newPM) { success, id ->
                 if (success) {
                     newPM.id = id
