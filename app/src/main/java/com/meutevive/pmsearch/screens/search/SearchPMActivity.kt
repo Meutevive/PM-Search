@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.FirebaseDatabase
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.adapters.PMAdapters
 import com.meutevive.pmsearch.data.repository.AlgoliaClient
@@ -19,19 +20,18 @@ import com.meutevive.pmsearch.screens.register.RegisterPMActivity
 class SearchPMActivity : AppCompatActivity() {
 
     private lateinit var pmAdapter: PMAdapters
-    private lateinit var firestorePMRepository: FirestorePMRepository
-   /* private val algoliaClient = AlgoliaClient()*/
-
+    private lateinit var firebasePMRepository: FirestorePMRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_pm)
         supportActionBar?.hide()
 
-        firestorePMRepository = FirestorePMRepository()
+        firebasePMRepository = FirestorePMRepository()
 
         initializeViews()
     }
+
 
     private fun initializeViews() {
         val searchResultsRecyclerView: RecyclerView = findViewById(R.id.search_results_recycler_view)
@@ -81,7 +81,7 @@ class SearchPMActivity : AppCompatActivity() {
 
     //update search by keyword
     private fun performSearch(query: String) {
-        firestorePMRepository.searchPM(query) { results: List<PM>?, exception: Exception? ->
+        firebasePMRepository.searchPM(query) { results: List<PM>?, exception: Exception? ->
             if (exception != null) {
                 // Handle the error
                 Toast.makeText(this, "Une erreur s'est produite: $exception", Toast.LENGTH_SHORT).show()

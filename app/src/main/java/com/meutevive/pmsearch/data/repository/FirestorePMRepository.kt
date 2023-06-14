@@ -3,95 +3,72 @@ package com.meutevive.pmsearch.data.repository
 
 import android.util.Log
 import androidx.constraintlayout.widget.ConstraintLayoutStates.TAG
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.meutevive.pmsearch.models.PM
 
 class FirestorePMRepository : PMRepository {
 
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val pmCollection = firestore.collection("LesPM")
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
-
-
-
+    // Register a new PM
     override fun registerPM(pm: PM, callback: (success: Boolean, id: String?) -> Unit) {
-        val db = FirebaseFirestore.getInstance()
-        val documentRef = db.collection("LesPM").document() // Create new document with auto generated id
-        pm.id = documentRef.id // Update the id of PM with the Firestore document id
-        documentRef
-            .set(pm)
+        val reference = database.getReference("LesPM").push() // Create new node with auto generated id
+        pm.id = reference.key // Update the id of PM with the Firebase node key
+        reference.setValue(pm)
             .addOnSuccessListener { callback(true, pm.id) }
             .addOnFailureListener { callback(false, null) }
     }
 
-
-
-
-
-    //update pm
+    // Update an existing PM
     override fun updatePM(pm: PM, callback: (success: Boolean) -> Unit) {
-        // Get a reference to your Firestore database
-        val db = FirebaseFirestore.getInstance()
-
-        // Get a reference to the specific PM document in the database
-        val pmRef = pm.id?.let { db.collection("LesPM").document(it) }
-
-        // Set the PM document to the updated PM
-        if (pmRef != null) {
-            pmRef.set(pm)
-                .addOnSuccessListener {
-                    Log.d("EditPMActivity", "PM successfully updated!")
-                    callback(true)
-                }
-                .addOnFailureListener { e ->
-                    Log.w("EditPMActivity", "Error updating PM", e)
-                    callback(false)
-                }
+        pm.id?.let {
+            database.getReference("LesPM").child(it).setValue(pm)
+                .addOnSuccessListener { callback(true) }
+                .addOnFailureListener { callback(false) }
         }
     }
 
-
-    //delete pm
+    // Delete a PM
     fun deletePM(pmId: String, callback: (success: Boolean) -> Unit) {
-        pmCollection.document(pmId)
-            .delete()
-            .addOnSuccessListener {
-                callback(true)
-            }
-            .addOnFailureListener {
-                callback(false)
-            }
+        database.getReference("LesPM").child(pmId)
+            .removeValue()
+            .addOnSuccessListener { callback(true) }
+            .addOnFailureListener { callback(false) }
     }
 
-    //search pm
-
+    // Search for PMs
     fun searchPM(query: String, callback: (List<PM>?, Exception?) -> Unit) {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("LesPM")
-            .orderBy("pmNumber")
-            .startAt(query)
-            .endAt(query+"\uf8ff")
-            .get()
-            .addOnSuccessListener { documents ->
-                val pms = documents.toObjects(PM::class.java)
-                if (pms.isEmpty()) {
-                    callback(emptyList(), null)
-                } else {
-                    callback(pms, null)
+        val ref = database.getReference("LesPM")
+        ref.orderByChild("pmNumber").startAt(query).endAt(query + "\uf8ff")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val pms = snapshot.children.mapNotNull { it.getValue(PM::class.java) }
+                    if (pms.isEmpty()) {
+                        callback(emptyList(), null)
+                    } else {
+                        callback(pms, null)
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                callback(null, exception)
-            }
+
+                override fun onCancelled(error: DatabaseError) {
+                    callback(null, error.toException())
+                }
+            })
     }
 
-    //get all pms
+    // Get a PM by id
     fun getPM(pmId: String, callback: (PM) -> Unit) {
-        firestore.collection("LesPM").document(pmId).get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val pm = document.toObject(PM::class.java)
-                    callback(pm!!)
+        database.getReference("LesPM").child(pmId).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val pm = snapshot.getValue(PM::class.java)
+                    if (pm != null) {
+                        callback(pm)
+                    }
                 } else {
                     Log.d(TAG, "No such document")
                 }
@@ -100,15 +77,6 @@ class FirestorePMRepository : PMRepository {
                 Log.d(TAG, "get failed with ", exception)
             }
     }
-
-
-
-
-
-
-
-
-
 
 
 }
