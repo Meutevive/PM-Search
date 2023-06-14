@@ -97,6 +97,18 @@ class SearchPMActivity : AppCompatActivity() {
             }
         }
     }
+    //cycle de vie de la recherche
+    override fun onResume() {
+        super.onResume()
+        val pmSearchView: SearchView = findViewById(R.id.pmSearchView)
+        val query = pmSearchView.query.toString()
+        if (!query.isBlank()) {
+            performSearch(query)
+        }
+    }
+
+
+
 
 
 
