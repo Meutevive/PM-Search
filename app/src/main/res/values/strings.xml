@@ -20,4 +20,5 @@
     <string name="confirmer">Confirmer</string>
     <string name="add_pm">Ajouter un PM</string>
     <string name="route_button">Itinéraire</string>
+    <string name="aucun_pm_trouv">Aucun PM trouvé</string>
 </resources>
