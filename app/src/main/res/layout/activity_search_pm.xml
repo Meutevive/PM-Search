@@ -42,6 +42,7 @@
             app:searchIcon="@null" />
     </androidx.cardview.widget.CardView>
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/searchPmButton"
         android:layout_width="wrap_content"
@@ -65,6 +66,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/add_pm" />
+
+    <TextView
+        android:id="@+id/no_results_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/aucun_pm_trouv"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/search_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_recycler_view"

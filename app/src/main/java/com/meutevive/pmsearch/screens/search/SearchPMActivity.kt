@@ -3,6 +3,8 @@ package com.meutevive.pmsearch.screens.search
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +39,7 @@ class SearchPMActivity : AppCompatActivity() {
         val searchResultsRecyclerView: RecyclerView = findViewById(R.id.search_results_recycler_view)
         val pmSearchView: SearchView = findViewById(R.id.pmSearchView)
         val addPM: FloatingActionButton = findViewById(R.id.add_pm)
+        val noResultsTextView: TextView = findViewById(R.id.no_results_text_view)
 
         pmAdapter = PMAdapters(listOf()) { pm ->
             // Handle click on a PM
@@ -56,6 +59,8 @@ class SearchPMActivity : AppCompatActivity() {
             adapter = pmAdapter
         }
 
+
+
         pmSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // Do nothing on submit, we update as the user types
@@ -63,7 +68,14 @@ class SearchPMActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrBlank()) {
+                if (newText.isNullOrBlank()) {
+                    // If search query is empty or blank, clear the search results
+                    pmAdapter.updatePMList(emptyList())
+                   /* searchResultsRecyclerView.visibility = View.GONE
+                    noResultsTextView.visibility = View.GONE*/
+
+                } else {
+
                     performSearch(newText)
                 }
                 return true
@@ -77,10 +89,17 @@ class SearchPMActivity : AppCompatActivity() {
                 performSearch(query)
             }
         }
+
+
+
+
+
     }
 
     //update search by keyword
     private fun performSearch(query: String) {
+        val noResultsTextView: TextView = findViewById(R.id.no_results_text_view)
+
         firestorePMRepository.searchPM(query) { results: List<PM>?, exception: Exception? ->
             if (exception != null) {
                 // Handle the error
@@ -89,29 +108,23 @@ class SearchPMActivity : AppCompatActivity() {
                 // Update the RecyclerView with the search results
                 if (results != null) {
                     if (results.isEmpty()) {
-                        Toast.makeText(this, "Aucun PM trouvé", Toast.LENGTH_SHORT).show()
+                        // Show the "No results" text view and hide the recycler view
+                        noResultsTextView.visibility = View.VISIBLE
                     } else {
+                        // Hide the "No results" text view and show the recycler view
+                        noResultsTextView.visibility = View.GONE
                         pmAdapter.updatePMList(results)
                     }
                 }
             }
         }
     }
+
     //cycle de vie de la recherche
     override fun onResume() {
         super.onResume()
-        val pmSearchView: SearchView = findViewById(R.id.pmSearchView)
-        val query = pmSearchView.query.toString()
-        if (!query.isBlank()) {
-            performSearch(query)
-        }
+        pmAdapter.updatePMList(emptyList())    // Clear the search results
     }
-
-
-
-
-
-
 
 
 }
