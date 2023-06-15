@@ -21,4 +21,12 @@
     <string name="add_pm">Ajouter un PM</string>
     <string name="route_button">Itinéraire</string>
     <string name="aucun_pm_trouv">Aucun PM trouvé</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="confirmer_le_mot_de_passe">Confirmer le mot de passe</string>
+    <string name="email">Email</string>
+    <string name="soci_t">Société</string>
+    <string name="nom_complet">Nom Complet</string>
+    <string name="e_mail">E-mail</string>
+    <string name="se_connecter">Se connecter</string>
+    <string name="s_inscrire">S\'inscrire</string>
 </resources>
