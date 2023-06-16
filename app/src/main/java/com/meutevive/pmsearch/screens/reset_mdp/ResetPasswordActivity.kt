@@ -3,8 +3,10 @@ package com.meutevive.pmsearch.screens.reset_mdp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
@@ -26,7 +28,13 @@ class ResetPasswordActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         emailEditText = findViewById(R.id.emailEditText)
         val resetPasswordButton: Button = findViewById(R.id.resetPasswordButton)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
+        supportActionBar?.apply {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
 
         resetPasswordButton.setOnClickListener {
             val email = emailEditText.text.toString()
@@ -45,6 +53,17 @@ class ResetPasswordActivity : AppCompatActivity() {
         }
 
     }
+      //manage nack arrow click
+      override fun onOptionsItemSelected(item: MenuItem): Boolean {
+          return when (item.itemId) {
+              android.R.id.home -> {
+                  onBackPressed()
+                  true
+              }
+              else -> super.onOptionsItemSelected(item)
+          }
+      }
+
 
     private fun resetPassword(email: String) {
         auth.sendPasswordResetEmail(email)
