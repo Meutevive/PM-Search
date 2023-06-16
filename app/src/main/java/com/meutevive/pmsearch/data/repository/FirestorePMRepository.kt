@@ -12,8 +12,6 @@ class FirestorePMRepository : PMRepository {
     private val pmCollection = firestore.collection("LesPM")
 
 
-
-
     override fun registerPM(pm: PM, callback: (success: Boolean, id: String?) -> Unit) {
         val db = FirebaseFirestore.getInstance()
         val documentRef = db.collection("LesPM").document() // Create new document with auto generated id
@@ -23,9 +21,6 @@ class FirestorePMRepository : PMRepository {
             .addOnSuccessListener { callback(true, pm.id) }
             .addOnFailureListener { callback(false, null) }
     }
-
-
-
 
 
     //update pm
@@ -100,15 +95,6 @@ class FirestorePMRepository : PMRepository {
                 Log.d(TAG, "get failed with ", exception)
             }
     }
-
-
-
-
-
-
-
-
-
 
 
 }

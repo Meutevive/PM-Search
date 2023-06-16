@@ -6,8 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,16 +17,33 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".screens.edit.EditPMActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.search.SearchPMActivity"
-            android:exported="true">
+            android:name=".screens.splashscreen.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".screens.reset_mdp.ResetPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".screens.signup.SignupActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".screens.login.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".screens.edit.EditPMActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.search.SearchPMActivity"
+            android:exported="false">
         </activity>
         <activity
             android:name=".screens.manage.PMDetailsActivity"
@@ -41,9 +56,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
