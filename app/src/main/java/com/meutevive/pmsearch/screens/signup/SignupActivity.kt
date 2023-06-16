@@ -3,9 +3,11 @@ package com.meutevive.pmsearch.screens.signup
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,17 +44,27 @@ class SignupActivity : AppCompatActivity() {
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         passwordConfirmationEditText = findViewById(R.id.passwordConfirmationEditText)
-
         val signUpButton: Button = findViewById(R.id.signUpButton)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
+
+
+
         signUpButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             val passwordConfirmation = passwordConfirmationEditText.text.toString()
-            val firstName = firstNameEditText.text.toString()
+            val fullname = firstNameEditText.text.toString()
             val company = companyEditText.text.toString()
 
             // Vérifications des champs
-            if (firstName.isEmpty() || !firstName.matches(Regex("^[a-zA-Z- ]+$"))) {
+            if (fullname.isEmpty() || !fullname.matches(Regex("^[a-zA-Z- ]+$"))) {
                 firstNameEditText.error = "Veuillez entrer un prénom valide"
                 return@setOnClickListener
             }
@@ -82,11 +94,23 @@ class SignupActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            createAccount(email, password, firstName, company)
+            createAccount(email, password, fullname, company)
         }
     }
 
-    private fun createAccount(email: String, password: String, firstName: String, company: String) {
+    //manage nack arrow click
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
+    private fun createAccount(email: String, password: String, fullname: String, company: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -94,7 +118,7 @@ class SignupActivity : AppCompatActivity() {
                     user?.sendEmailVerification() //email de vérification envoyer dans la création de compte
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                saveUserInfoInFirestore(user.uid, firstName, company)
+                                saveUserInfoInFirestore(user.uid, fullname, company)
                             }
                         }
                 } else {
@@ -104,9 +128,9 @@ class SignupActivity : AppCompatActivity() {
     }
 
 
-    private fun saveUserInfoInFirestore(uid: String, firstName: String, company: String) {
+    private fun saveUserInfoInFirestore(uid: String, fullname: String, company: String) {
         val user = HashMap<String, Any>()
-        user["firstName"] = firstName
+        user["fullname"] = fullname
         user["company"] = company
 
         firestore.collection("users").document(uid)

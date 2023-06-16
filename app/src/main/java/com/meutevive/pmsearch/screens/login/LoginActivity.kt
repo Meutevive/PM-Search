@@ -69,7 +69,6 @@ class LoginActivity : AppCompatActivity() {
         forgetPassword.setOnClickListener{
            val resetmdp =  Intent(this, ResetPasswordActivity::class.java)
             startActivity(resetmdp)
-            finish()
         }
     }
 
@@ -91,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "L'email ou le mot de passe est incorrect.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
