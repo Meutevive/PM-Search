@@ -1,5 +1,6 @@
 package com.meutevive.pmsearch.screens.signup
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
@@ -9,6 +10,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.meutevive.pmsearch.R
+import com.meutevive.pmsearch.screens.login.LoginActivity
 
 
 class SignupActivity : AppCompatActivity() {
@@ -49,14 +51,14 @@ class SignupActivity : AppCompatActivity() {
             val firstName = firstNameEditText.text.toString()
             val company = companyEditText.text.toString()
 
-            //verifications des champs
-            if (firstName.isEmpty()) {
-                firstNameEditText.error = "Veuillez entrer votre prénom"
+            // Vérifications des champs
+            if (firstName.isEmpty() || !firstName.matches(Regex("^[a-zA-Z- ]+$"))) {
+                firstNameEditText.error = "Veuillez entrer un prénom valide"
                 return@setOnClickListener
             }
 
-            if (company.isEmpty()) {
-                companyEditText.error = "Veuillez entrer le nom de votre entreprise"
+            if (company.isEmpty() || !company.matches(Regex("^[a-zA-Z0-9- ]+$"))) {
+                companyEditText.error = "Veuillez entrer un nom d'entreprise valide"
                 return@setOnClickListener
             }
 
@@ -70,24 +72,18 @@ class SignupActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (password.isEmpty()) {
-                passwordEditText.error = "Veuillez entrer votre mot de passe"
+            if (password.isEmpty() || password.length < 8) {
+                passwordEditText.error = "Le mot de passe doit avoir au moins 8 caractères"
                 return@setOnClickListener
             }
 
-            if (passwordConfirmation.isEmpty()) {
-                passwordConfirmationEditText.error = "Veuillez confirmer votre mot de passe"
-                return@setOnClickListener
-            }
-
-            if (password != passwordConfirmation) {
+            if (passwordConfirmation.isEmpty() || password != passwordConfirmation) {
                 passwordConfirmationEditText.error = "Les mots de passe ne correspondent pas"
                 return@setOnClickListener
             }
 
             createAccount(email, password, firstName, company)
         }
-
     }
 
     private fun createAccount(email: String, password: String, firstName: String, company: String) {
@@ -95,14 +91,18 @@ class SignupActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    if (user != null) {
-                        saveUserInfoInFirestore(user.uid, firstName, company)
-                    }
+                    user?.sendEmailVerification() //email de vérification envoyer dans la création de compte
+                        ?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                saveUserInfoInFirestore(user.uid, firstName, company)
+                            }
+                        }
                 } else {
                     Toast.makeText(this, "La création de compte a échoué", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
 
     private fun saveUserInfoInFirestore(uid: String, firstName: String, company: String) {
         val user = HashMap<String, Any>()
@@ -113,9 +113,15 @@ class SignupActivity : AppCompatActivity() {
             .set(user)
             .addOnSuccessListener {
                 Toast.makeText(this, "Les informations de l'utilisateur ont été enregistrées avec succès", Toast.LENGTH_SHORT).show()
+
+                // Redirige l'utilisateur vers LoginActivity après l'inscription
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "L'enregistrement des informations de l'utilisateur a échoué", Toast.LENGTH_SHORT).show()
             }
     }
+
 }

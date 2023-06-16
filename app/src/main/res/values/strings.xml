@@ -29,4 +29,6 @@
     <string name="e_mail">E-mail</string>
     <string name="se_connecter">Se connecter</string>
     <string name="s_inscrire">S\'inscrire</string>
+    <string name="reinitialiser">Reinitialiser</string>
+    <string name="forgot_password">Mot de passe oublié?</string>
 </resources>

@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
+import com.meutevive.pmsearch.screens.reset_mdp.ResetPasswordActivity
+import com.meutevive.pmsearch.screens.search.SearchPMActivity
 import com.meutevive.pmsearch.screens.signup.SignupActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -30,8 +33,11 @@ class LoginActivity : AppCompatActivity() {
 
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
-
         val loginButton: Button = findViewById(R.id.loginButton)
+        val forgetPassword: TextView = findViewById(R.id.forgotPasswordTextView)
+        val sigup: Button = findViewById(R.id.signUpButton)
+
+
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
@@ -51,24 +57,45 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            signIn(email, password)
+            login(email, password)
+        }
+        //redirect to sign up activity
+        sigup.setOnClickListener {
+            val signup = Intent(this, SignupActivity::class.java )
+            startActivity(signup)
         }
 
-        val signup = Intent(this, SignupActivity::class.java )
-        startActivity(signup)
-
-
+        //redirect to reste mdp activity
+        forgetPassword.setOnClickListener{
+           val resetmdp =  Intent(this, ResetPasswordActivity::class.java)
+            startActivity(resetmdp)
+            finish()
+        }
     }
 
-    private fun signIn(email: String, password: String) {
+    private fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Authentification réussie", Toast.LENGTH_SHORT).show()
-                    // You can also navigate to another activity here
+                    val user = auth.currentUser
+                    user?.reload()?.addOnSuccessListener {
+                        if (user.isEmailVerified) {
+                            // User is signed in and email is verified
+                            // Redirect to main activity
+                            val intent = Intent(this, SearchPMActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            // Else, show an error message
+                            Toast.makeText(this, "Veuillez vérifier votre email avant de continuer", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 } else {
-                    Toast.makeText(this, "Échec de l'authentification", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
+
+
 }
