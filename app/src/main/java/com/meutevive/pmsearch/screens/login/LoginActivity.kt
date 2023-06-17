@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
+import com.meutevive.pmsearch.screens.home.HomeActivity
 import com.meutevive.pmsearch.screens.reset_mdp.ResetPasswordActivity
 import com.meutevive.pmsearch.screens.search.SearchPMActivity
 import com.meutevive.pmsearch.screens.signup.SignupActivity
@@ -81,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
                         if (user.isEmailVerified) {
                             // User is signed in and email is verified
                             // Redirect to main activity
-                            val intent = Intent(this, SearchPMActivity::class.java)
+                            val intent = Intent(this, HomeActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {

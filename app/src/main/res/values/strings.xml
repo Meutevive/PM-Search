@@ -32,4 +32,11 @@
     <string name="reinitialiser">Reinitialiser</string>
     <string name="forgot_password">Mot de passe oublié?</string>
     <string name="mgk_telecom_all_right_reserved_nby_meutevive">MGK TELECOM all right reserved\nby Meutevive</string>
+    <string name="home">Acceuil</string>
+    <string name="recherche_pm">Recherche PM</string>
+    <string name="ajout_pm">Ajout PM</string>
+    <string name="profil">Profil</string>
+    <string name="d_connexion">Déconnexion</string>
+    <string name="pm_consult_s">PM consultés</string>
+    <string name="total_pm">Total PM</string>
 </resources>
