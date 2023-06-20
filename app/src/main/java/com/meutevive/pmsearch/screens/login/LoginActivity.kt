@@ -25,6 +25,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        //verified if user is already connected.
+        if(FirebaseAuth.getInstance().currentUser != null){
+            // User is already logged in. Redirect to home page
+            val homeIntent = Intent(this, HomeActivity::class.java)
+            startActivity(homeIntent)
+            finish() // To prevent the user from going back to login activity
+        }
+
         initializeViews()
     }
 
@@ -95,7 +103,5 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
-
-
 
 }

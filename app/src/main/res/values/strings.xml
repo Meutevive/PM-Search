@@ -39,4 +39,6 @@
     <string name="d_connexion">Déconnexion</string>
     <string name="pm_consult_s">PM consultés</string>
     <string name="total_pm">Total PM</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
