@@ -16,7 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
-
+        <activity
+            android:name=".screens.profil.ProfilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.home.HomeActivity"
+            android:exported="false" />
         <activity
             android:name=".screens.splashscreen.SplashActivity"
             android:exported="true"
@@ -27,43 +32,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".screens.reset_mdp.ResetPasswordActivity"
-            android:parentActivityName=".screens.login.LoginActivity"
             android:exported="false"
+            android:parentActivityName=".screens.login.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".screens.signup.SignupActivity"
-            android:parentActivityName=".screens.login.LoginActivity"
             android:exported="false"
+            android:parentActivityName=".screens.login.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".screens.login.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".screens.edit.EditPMActivity"
             android:exported="false" />
-
         <activity
             android:name=".screens.search.SearchPMActivity"
-            android:exported="false">
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".screens.manage.PMDetailsActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".screens.register.RegisterPMActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"

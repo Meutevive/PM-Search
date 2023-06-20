@@ -51,7 +51,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/firstnameEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:background="@android:color/transparent"
@@ -84,7 +84,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/companyEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:background="@android:color/transparent"
@@ -118,7 +118,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/emailEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:background="@android:color/transparent"
@@ -152,7 +152,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passwordEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:background="@android:color/transparent"
@@ -186,7 +186,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passwordConfirmationEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:background="@android:color/transparent"
@@ -208,10 +208,11 @@
             <Button
                 android:id="@+id/signUpButton"
                 style="@style/rounded_button"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
+                android:layout_gravity="center"
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
-                android:text="S'inscrire" />
+                android:text="@string/s_inscrire" />
 
         </LinearLayout>
     </ScrollView>

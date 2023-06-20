@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
+import com.meutevive.pmsearch.screens.home.HomeActivity
 import com.meutevive.pmsearch.screens.reset_mdp.ResetPasswordActivity
 import com.meutevive.pmsearch.screens.search.SearchPMActivity
 import com.meutevive.pmsearch.screens.signup.SignupActivity
@@ -23,6 +24,14 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        //verified if user is already connected.
+        if(FirebaseAuth.getInstance().currentUser != null){
+            // User is already logged in. Redirect to home page
+            val homeIntent = Intent(this, HomeActivity::class.java)
+            startActivity(homeIntent)
+            finish() // To prevent the user from going back to login activity
+        }
 
         initializeViews()
     }
@@ -81,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
                         if (user.isEmailVerified) {
                             // User is signed in and email is verified
                             // Redirect to main activity
-                            val intent = Intent(this, SearchPMActivity::class.java)
+                            val intent = Intent(this, HomeActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
@@ -94,7 +103,5 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
-
-
 
 }
