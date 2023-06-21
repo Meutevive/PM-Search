@@ -70,14 +70,13 @@
         </androidx.cardview.widget.CardView>
 
     </ScrollView>
-
     <Button
         android:id="@+id/delete_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/supprimer"
         style="@style/RedButton"
-        app:layout_constraintEnd_toStartOf="@+id/edit_button"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -88,8 +87,16 @@
         android:text="@string/modifier"
         style="@style/Modifier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/delete_button"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_pm"
