@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -99,37 +101,37 @@ class HomeActivity : AppCompatActivity() {
             menuItem.isChecked = true
             drawerLayout.closeDrawers()
 
-            when (menuItem.itemId) {
-                R.id.nav_search_pm -> {
-                    //handle search click
-                   val searchIntent = Intent(this, SearchPMActivity::class.java)
-                    startActivity(searchIntent)
-                    true
-                }
-                R.id.nav_add_pm -> {
-                    // Handle add pm click
-                    val addPMIntent = Intent(this, RegisterPMActivity::class.java)
-                    startActivity(addPMIntent)
-                    true
-                }
-                R.id.nav_logout -> {
-                    // Clear stored user data
-                    val sharedPref = getSharedPreferences("auth", Context.MODE_PRIVATE)
-                    with (sharedPref.edit()) {
-                        clear()
-                        apply()
+            Handler(Looper.getMainLooper()).postDelayed({
+                when (menuItem.itemId) {
+                    R.id.nav_search_pm -> {
+                        //handle search click
+                        val searchIntent = Intent(this, SearchPMActivity::class.java)
+                        startActivity(searchIntent)
                     }
-                    // Redirect the user to the Login Activity
-                    val loginIntent = Intent(this, LoginActivity::class.java)
-                    startActivity(loginIntent)
-                    finish()
-                    true
+                    R.id.nav_add_pm -> {
+                        // Handle add pm click
+                        val addPMIntent = Intent(this, RegisterPMActivity::class.java)
+                        startActivity(addPMIntent)
+                    }
+                    R.id.nav_logout -> {
+                        // Clear stored user data
+                        val sharedPref = getSharedPreferences("auth", Context.MODE_PRIVATE)
+                        with (sharedPref.edit()) {
+                            clear()
+                            apply()
+                        }
+                        // Redirect the user to the Login Activity
+                        val loginIntent = Intent(this, LoginActivity::class.java)
+                        startActivity(loginIntent)
+                        finish()
+                    }
+                    // Handle other drawer items...
                 }
+            }, 200) // le délai est défini à 200ms ici, mais vous pouvez l'ajuster en fonction de vos besoins
 
-                // Handle other drawer items...
-                else -> false
-            }
+            true
         }
+
 
     }
 
