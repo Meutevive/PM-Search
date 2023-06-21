@@ -38,11 +38,16 @@ class PMDetailsActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         // retrieve the PM object from intent
-        pm = intent.getParcelableExtra<PM>("pm") ?: PM()
+        val pmId = intent.getStringExtra("PM_ID")
+
+        if (pmId != null) {
+            loadPMData(pmId)
+        } else {
+            Toast.makeText(this, "PM ID is missing", Toast.LENGTH_SHORT).show()
+        }
 
         initializeViews()
 
-        loadPMData(pm)
     }
 
     private fun initializeViews() {
@@ -65,8 +70,8 @@ class PMDetailsActivity : AppCompatActivity() {
 
         // handle click on the delete button
         deleteButton.setOnClickListener {
-            pm.id?.let { it1 ->
-                FirestorePMRepository().deletePM(it1) { success ->
+            pm.id?.let { pmId ->
+                FirestorePMRepository().deletePM(pmId) { success ->
                     if (success) {
                         // PM was deleted successfully
                         Toast.makeText(this, "PM deleted", Toast.LENGTH_SHORT).show()
@@ -76,6 +81,9 @@ class PMDetailsActivity : AppCompatActivity() {
                         Toast.makeText(this, "Could not delete PM", Toast.LENGTH_SHORT).show()
                     }
                 }
+            } ?: run {
+                // PM ID is null
+                Toast.makeText(this, "PM ID is missing", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -100,13 +108,14 @@ class PMDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadPMData(pm: PM) {
-        pmNameTextView.text = pm.pmNumber
-        pmDetailTextView.text = pm.comment
-        pmAdresse.text = pm.address
+    private fun loadPMData(pmId: String) {
+        repository.getPM(pmId) { pm ->
+            this.pm = pm // update local PM object
 
-        repository.getPM(pm.id!!) { updatedPm ->
-            this.pm = updatedPm // update local PM object
+            pmNameTextView.text = pm.pmNumber
+            pmDetailTextView.text = pm.comment
+            pmAdresse.text = pm.address
+
             // load image with Glide
             Glide.with(this)
                 .load(pm.photoUrl)

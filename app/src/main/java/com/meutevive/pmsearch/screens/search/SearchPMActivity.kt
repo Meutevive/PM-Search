@@ -3,10 +3,12 @@ package com.meutevive.pmsearch.screens.search
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -40,6 +42,14 @@ class SearchPMActivity : AppCompatActivity() {
         val pmSearchView: SearchView = findViewById(R.id.pmSearchView)
         val addPM: FloatingActionButton = findViewById(R.id.add_pm)
         val noResultsTextView: TextView = findViewById(R.id.no_results_text_view)
+        val toolbar: Toolbar = findViewById(R.id.search_pm_toolbar)
+
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
 
         pmAdapter = PMAdapters(listOf()) { pm ->
             // Handle click on a PM
@@ -89,11 +99,17 @@ class SearchPMActivity : AppCompatActivity() {
                 performSearch(query)
             }
         }
+    }
 
-
-
-
-
+    //manage nack arrow click
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     //update search by keyword

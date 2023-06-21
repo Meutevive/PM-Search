@@ -10,10 +10,12 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -57,6 +59,15 @@ class RegisterPMActivity : BaseActivity() {
     private fun initializeViews() {
         // Register button
         val registerButton: Button = findViewById(R.id.submit_button)
+        val toolbar: Toolbar = findViewById(R.id.register_pm_toolbar)
+
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
+
         registerButton.setOnClickListener {
             if (this::selectedImageUri.isInitialized) {
                 registerPM()
@@ -77,6 +88,17 @@ class RegisterPMActivity : BaseActivity() {
         val uploadButton: Button = findViewById(R.id.photoButton)
         uploadButton.setOnClickListener {
             openGallery()
+        }
+    }
+
+    //manage nack arrow click
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

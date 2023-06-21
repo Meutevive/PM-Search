@@ -5,10 +5,12 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.models.PM
 
@@ -56,11 +58,35 @@ class EditPMActivity : AppCompatActivity() {
         confirmButton = findViewById(R.id.submit_button)
         imageView = findViewById(R.id.selectedImageView)
         PhotoButton = findViewById(R.id.photoButton)
+        val toolbar: Toolbar = findViewById(R.id.edit_pm_toolbar
+
+
+        )
         PhotoButton.setOnClickListener {
             openGallery()
         }
         confirmButton.setOnClickListener {
             saveEdits()
+        }
+
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
+
+    }
+
+
+    //manage nack arrow click
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -77,14 +103,6 @@ class EditPMActivity : AppCompatActivity() {
                 .into(imageView)
         }
     }
-
-
-
-
-
-
-
-
 
     //updatePM (modified to add photo edits)
     private fun saveEdits() {
