@@ -1,6 +1,8 @@
 package com.meutevive.pmsearch.screens.manage
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -8,6 +10,8 @@ import android.widget.TextView
 import android.widget.Toast
 import android.net.Uri
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
@@ -31,7 +35,6 @@ class PMDetailsActivity : AppCompatActivity() {
     private lateinit var deleteButton: Button
     private lateinit var addButton: FloatingActionButton
     private lateinit var routeButton: FloatingActionButton
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pm_details)
@@ -60,6 +63,22 @@ class PMDetailsActivity : AppCompatActivity() {
         deleteButton = findViewById(R.id.delete_button)
         addButton = findViewById(R.id.add_pm)
         routeButton = findViewById(R.id.route_button)
+
+        val states = arrayOf(
+            intArrayOf(android.R.attr.state_enabled), // enabled
+            intArrayOf(-android.R.attr.state_enabled) // disabled
+        )
+
+        val colors = intArrayOf(
+            ContextCompat.getColor(this, R.color.red), // enabled
+            Color.argb((0.6f * 255).toInt(), 213, 26, 26) // disabled
+
+        )
+
+        val colorStateList = ColorStateList(states, colors)
+
+        ViewCompat.setBackgroundTintList(deleteButton, colorStateList)
+
 
         // handle click on the edit button
         editButton.setOnClickListener {
