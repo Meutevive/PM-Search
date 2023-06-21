@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:theme="@style/AppTheme">
+    android:theme="@style/Theme.MyApp">
 
     <ImageView
         android:id="@+id/appLogo"

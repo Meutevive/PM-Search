@@ -12,6 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/delete_button">
 
+
         <androidx.cardview.widget.CardView
             android:id="@+id/pm_card"
             android:layout_width="match_parent"
@@ -75,8 +76,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/supprimer"
-        android:background="@color/red"
-        android:textColor="@color/black"
+        style="@style/RedButton"
         app:layout_constraintEnd_toStartOf="@+id/edit_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -86,8 +86,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/modifier"
-        android:background="@color/blue"
-        android:textColor="@color/black"
+        style="@style/Modifier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/delete_button"
         app:layout_constraintBottom_toBottomOf="parent" />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:theme="@style/AppTheme"
+    android:theme="@style/Theme.MyApp"
     tools:context=".screens.register.RegisterPMActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        app:navigationIcon="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
