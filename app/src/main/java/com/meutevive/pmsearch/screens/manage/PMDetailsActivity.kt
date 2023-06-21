@@ -70,7 +70,7 @@ class PMDetailsActivity : AppCompatActivity() {
         )
 
         val colors = intArrayOf(
-            ContextCompat.getColor(this, R.color.red), // enabled
+            ContextCompat.getColor(this, R.color.red), // enabled collor red
             Color.argb((0.6f * 255).toInt(), 213, 26, 26) // disabled
 
         )
