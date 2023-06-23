@@ -95,6 +95,26 @@ class FirestorePMRepository : PMRepository {
                 Log.d(TAG, "get failed with ", exception)
             }
     }
+    //get user with role
+    fun getUserRole(userId: String, callback: (String) -> Unit) {
+        firestore.collection("Users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val role = document.getString("role")
+                    if (role != null) {
+                        callback(role)
+                    } else {
+                        Log.d(TAG, "No role field in document")
+                    }
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+    }
+
 
 
 }
