@@ -21,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var emailEditText: TextInputEditText
     private lateinit var passwordEditText: TextInputEditText
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -35,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
 
         initializeViews()
     }
+
 
     private fun initializeViews() {
 
