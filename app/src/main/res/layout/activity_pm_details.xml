@@ -7,10 +7,13 @@
     android:padding="16dp">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/delete_button"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/delete_button">
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="16dp">
 
 
         <androidx.cardview.widget.CardView
@@ -72,6 +75,17 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/report_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/signaler"
+        style="@style/RedButton"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    <Button
         android:id="@+id/delete_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -79,7 +93,7 @@
         style="@style/RedButton"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/report_button" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/edit_button"
@@ -89,20 +103,9 @@
         style="@style/Modifier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintBottom_toTopOf="@+id/report_button" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
-    <Button
-        android:id="@+id/report_button"
-        style="@style/RedButton"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="@string/signaler"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -110,6 +113,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
 
 
 

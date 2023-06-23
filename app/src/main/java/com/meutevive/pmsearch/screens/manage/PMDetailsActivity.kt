@@ -1,5 +1,6 @@
 package com.meutevive.pmsearch.screens.manage
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -9,13 +10,15 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.net.Uri
+import android.text.InputType
+import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
@@ -37,6 +40,7 @@ class PMDetailsActivity : AppCompatActivity() {
     private lateinit var deleteButton: Button
     private lateinit var addButton: FloatingActionButton
     private lateinit var routeButton: FloatingActionButton
+    private  lateinit var  reportButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pm_details)
@@ -45,17 +49,18 @@ class PMDetailsActivity : AppCompatActivity() {
         // retrieve the PM object from intent
         val pmId = intent.getStringExtra("PM_ID")
 
+        initializeViews()
+
         if (pmId != null) {
             loadPMData(pmId)
         } else {
             Toast.makeText(this, "PM ID is missing", Toast.LENGTH_SHORT).show()
         }
 
-        initializeViews()
-
     }
 
     private fun initializeViews() {
+
         pmNameTextView = findViewById(R.id.pm_number)
         pmDetailTextView = findViewById(R.id.pm_comment)
         pmAdresse = findViewById(R.id.pm_address)
@@ -63,8 +68,14 @@ class PMDetailsActivity : AppCompatActivity() {
         pmImageView = findViewById(R.id.pm_photo)
         editButton = findViewById(R.id.edit_button)
         deleteButton = findViewById(R.id.delete_button)
+        reportButton = findViewById(R.id.report_button)
         addButton = findViewById(R.id.add_pm)
         routeButton = findViewById(R.id.route_button)
+
+        //btn invisible on initialize for user roles
+        editButton.visibility = View.INVISIBLE
+        deleteButton.visibility = View.INVISIBLE
+        reportButton.visibility = View.INVISIBLE
 
         val states = arrayOf(
             intArrayOf(android.R.attr.state_enabled), // enabled
@@ -74,13 +85,11 @@ class PMDetailsActivity : AppCompatActivity() {
         val colors = intArrayOf(
             ContextCompat.getColor(this, R.color.red), // enabled collor red
             Color.argb((0.6f * 255).toInt(), 213, 26, 26) // disabled
-
         )
 
         val colorStateList = ColorStateList(states, colors)
-
-        ViewCompat.setBackgroundTintList(deleteButton, colorStateList)
-
+        ViewCompat.setBackgroundTintList(deleteButton, colorStateList) //apply red collor to delete btn
+        ViewCompat.setBackgroundTintList(reportButton, colorStateList) //apply red collor to report btn
 
         // handle click on the edit button
         editButton.setOnClickListener {
@@ -127,15 +136,63 @@ class PMDetailsActivity : AppCompatActivity() {
                 Toast.makeText(this, "No map application found", Toast.LENGTH_SHORT).show()
             }
         }
+
+        //report btn action
+        reportButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Signaler ce PM")
+
+            val input = EditText(this)
+            input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            input.setLines(2) // Set initial lines
+            input.maxLines = 10 // Set maximum lines
+            builder.setView(input)
+
+            builder.setPositiveButton("Confirmer") { dialog, _ ->
+                val reportComment = input.text.toString()
+                pm.id?.let { pmId ->
+                    repository.getPM(pmId) { resultPM ->
+                        if (resultPM != null) {
+                            if (resultPM.signalements == null) {
+                                resultPM.signalements = mutableListOf()
+                            }
+                            resultPM.signalements.add(reportComment)
+                            repository.updatePM(resultPM) { success ->
+                                if (success) {
+                                    Toast.makeText(this, "PM signalé avec succès", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(this, "Erreur lors du signalement du PM", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(this, "Erreur lors de la récupération du PM", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            builder.setNegativeButton("Annuler") { dialog, _ ->
+                dialog.cancel()
+            }
+
+            builder.show()
+        }
+
+
+
     }
 
-    private fun updateButtonVisibility(role: String) {
+    private fun updateButtonVisibility(role: String?) {
+        Log.d(TAG, "Updating button visibility. Role: $role") // Log the role
+
         if (role == "admin") {
             deleteButton.visibility = View.VISIBLE
             editButton.visibility = View.VISIBLE
+            reportButton.visibility = View.GONE // Hide report button for admin
         } else {
+            // This branch will be used for normal users (role is null) and for any other roles
             deleteButton.visibility = View.GONE
             editButton.visibility = View.GONE
+            reportButton.visibility = View.VISIBLE // Show report button for non-admin
         }
     }
 
@@ -157,8 +214,6 @@ class PMDetailsActivity : AppCompatActivity() {
 
             // If the user is logged in (i.e., userId is not null), fetch their role
             if (userId != null) {
-                // Assuming that your repository has a method getUserRole(userId: String, callback: (role: String) -> Unit)
-                // that fetches the role of the user based on their user ID.
                 repository.getUserRole(userId) { role ->
                     updateButtonVisibility(role)
                 }

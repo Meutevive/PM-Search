@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
@@ -13,15 +12,11 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.models.PM
-
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.ObjectKey
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
 import com.meutevive.pmsearch.screens.register.RegisterPMActivity.Companion.GALLERY_REQUEST_CODE
-import com.meutevive.pmsearch.screens.search.SearchPMActivity
 
 class EditPMActivity : AppCompatActivity() {
 
@@ -138,10 +133,6 @@ class EditPMActivity : AppCompatActivity() {
     }
 
 
-
-
-
-
     //fun to open the gallery
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -176,8 +167,6 @@ class EditPMActivity : AppCompatActivity() {
             Toast.makeText(this, "Erreur lors de téléchargement.", Toast.LENGTH_SHORT).show()
         }
     }
-
-
 
 
 }

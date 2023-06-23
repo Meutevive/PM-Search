@@ -204,6 +204,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
+
+
     private fun updateUIWithUserData(user: User) {
         user_full_name.text = user.fullname
         user_company.text = user.company
@@ -221,7 +223,6 @@ class HomeActivity : AppCompatActivity() {
         val profileImage = findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profile_image)
         profileImage.setImageDrawable(drawable)
     }
-
 
     private fun updateUIWithPMsData(pms: List<PM>) {
         val recentPMs = pms.sortedBy { it.date }.takeLast(5)

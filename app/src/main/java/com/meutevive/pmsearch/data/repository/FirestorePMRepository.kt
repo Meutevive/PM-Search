@@ -96,16 +96,14 @@ class FirestorePMRepository : PMRepository {
             }
     }
     //get user with role
-    fun getUserRole(userId: String, callback: (String) -> Unit) {
-        firestore.collection("Users").document(userId).get()
+    fun getUserRole(userId: String, callback: (String?) -> Unit) {
+        firestore.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
+                    Log.d(TAG, "Document data: ${document.data}")
+
                     val role = document.getString("role")
-                    if (role != null) {
-                        callback(role)
-                    } else {
-                        Log.d(TAG, "No role field in document")
-                    }
+                    callback(role) // Call the callback with role, even if it's null
                 } else {
                     Log.d(TAG, "No such document")
                 }
@@ -114,6 +112,7 @@ class FirestorePMRepository : PMRepository {
                 Log.d(TAG, "get failed with ", exception)
             }
     }
+
 
 
 

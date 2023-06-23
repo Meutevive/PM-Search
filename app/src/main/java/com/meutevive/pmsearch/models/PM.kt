@@ -10,5 +10,6 @@ data class PM(
     var address: String = "",
     var comment: String = "",
     var date: Long = 0L,
-    var photoUrl: String = ""
+    var photoUrl: String = "",
+    var signalements: MutableList<String> = mutableListOf()
 ) : Parcelable
