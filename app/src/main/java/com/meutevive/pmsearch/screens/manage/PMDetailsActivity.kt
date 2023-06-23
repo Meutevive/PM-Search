@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.meutevive.pmsearch.R
 import com.meutevive.pmsearch.data.repository.FirestorePMRepository
 import com.meutevive.pmsearch.models.PM
@@ -127,6 +129,16 @@ class PMDetailsActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateButtonVisibility(role: String) {
+        if (role == "admin") {
+            deleteButton.visibility = View.VISIBLE
+            editButton.visibility = View.VISIBLE
+        } else {
+            deleteButton.visibility = View.GONE
+            editButton.visibility = View.GONE
+        }
+    }
+
     private fun loadPMData(pmId: String) {
         repository.getPM(pmId) { pm ->
             this.pm = pm // update local PM object
@@ -139,6 +151,19 @@ class PMDetailsActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(pm.photoUrl)
                 .into(pmImageView)
+
+            // Get the ID of the currently logged in user
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+            // If the user is logged in (i.e., userId is not null), fetch their role
+            if (userId != null) {
+                // Assuming that your repository has a method getUserRole(userId: String, callback: (role: String) -> Unit)
+                // that fetches the role of the user based on their user ID.
+                repository.getUserRole(userId) { role ->
+                    updateButtonVisibility(role)
+                }
+            }
         }
     }
+
 }

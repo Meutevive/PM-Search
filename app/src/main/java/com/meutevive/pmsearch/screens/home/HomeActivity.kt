@@ -120,6 +120,9 @@ class HomeActivity : AppCompatActivity() {
                             clear()
                             apply()
                         }
+                        // Sign out from Firebase Auth
+                        FirebaseAuth.getInstance().signOut()
+
                         // Redirect the user to the Login Activity
                         val loginIntent = Intent(this, LoginActivity::class.java)
                         startActivity(loginIntent)
