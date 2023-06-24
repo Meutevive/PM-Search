@@ -54,7 +54,7 @@ class SearchPMActivity : AppCompatActivity() {
         pmAdapter = PMAdapters(listOf()) { pm ->
             // Handle click on a PM
             val intent = Intent(this, PMDetailsActivity::class.java)
-            intent.putExtra("pm", pm)
+            intent.putExtra("PM_ID", pm.id)
             startActivity(intent)
         }
 
