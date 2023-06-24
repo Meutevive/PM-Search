@@ -110,7 +110,7 @@ dependencies {
 
     implementation 'com.leinardi.android:speed-dial:3.3.0'
 
-    //cloud messaging
+    //cloud messagi+ng
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
 
 

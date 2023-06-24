@@ -42,4 +42,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="signaler">Signaler</string>
+    <string name="channel_name">Notifications des signalements</string>
+    <string name="channel_description">Recevez une notification chaque fois qu\'un PM est signalé.</string>
+    <string name="msg_token_fmt">FCM Token: %s</string>
+
 </resources>
